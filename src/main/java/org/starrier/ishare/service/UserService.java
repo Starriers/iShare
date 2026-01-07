@@ -2,8 +2,6 @@ package org.starrier.ishare.service;
 
 import org.starrier.ishare.model.entity.User;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
@@ -54,19 +52,16 @@ public interface UserService {
     /**
      * Add user
      *
-     * @param request  {@link HttpServletRequest}
-     * @param response {@link HttpServletResponse}
+     * @param user user entity
      */
-    void addUser(HttpServletRequest request, HttpServletResponse response);
+    void addUser(User user);
 
     /**
      * update user.
      *
-     * @param request  {@link HttpServletRequest}
-     * @param response {@link HttpServletResponse}
+     * @param user user entity
      */
-    void updateUser(HttpServletRequest request, HttpServletResponse response);
-
+    void updateUser(User user);
 
     /**
      * Delete user by user's id

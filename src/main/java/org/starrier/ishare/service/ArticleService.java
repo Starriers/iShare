@@ -3,8 +3,6 @@ package org.starrier.ishare.service;
 import org.starrier.ishare.model.entity.Article;
 import org.starrier.ishare.model.entity.Comment;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
@@ -15,10 +13,9 @@ public interface ArticleService {
     /**
      * Add new Article.
      *
-     * @param request  {@link HttpServletRequest}
-     * @param response {@link HttpServletResponse}
+     * @param article article entity
      */
-    void addArticle(HttpServletRequest request, HttpServletResponse response);
+    void addArticle(Article article);
 
     /**
      * Find all articles.
@@ -62,10 +59,9 @@ public interface ArticleService {
     /**
      * Add comment.
      *
-     * @param request  {@link HttpServletRequest}
-     * @param response {@link HttpServletResponse}
+     * @param comment comment entity
      */
-    void addComment(HttpServletRequest request, HttpServletResponse response);
+    void addComment(Comment comment);
 
     /**
      * Show comments.
@@ -94,10 +90,9 @@ public interface ArticleService {
     /**
      * Update article.
      *
-     * @param request  {@link HttpServletRequest}
-     * @param response {@link HttpServletResponse}
+     * @param article article entity
      */
-    void update(HttpServletRequest request, HttpServletResponse response);
+    void update(Article article);
 
     /**
      * Delete Article By article's id.

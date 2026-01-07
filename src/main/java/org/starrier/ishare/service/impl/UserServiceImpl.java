@@ -6,15 +6,8 @@ import org.starrier.ishare.dao.UserDao;
 import org.starrier.ishare.model.entity.User;
 import org.starrier.ishare.service.UserService;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
-
-import static org.starrier.ishare.util.Constant.ID;
-import static org.starrier.ishare.util.Constant.PASSWORD;
-import static org.starrier.ishare.util.Constant.POWER;
-import static org.starrier.ishare.util.Constant.USERNAME;
 
 /**
  * @author Starrier
@@ -44,7 +37,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional(rollbackOn = Exception.class)
+    @Transactional(rollbackFor = Exception.class)
     public void register(User user) {
         userDao.registerByUsernameAndPassword(user.getUsername(), user.getPassword());
     }
@@ -62,7 +55,7 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    @Transactional(rollbackOn = Exception.class)
+    @Transactional(rollbackFor = Exception.class)
     public void deleteUserById(int id) {
         userDao.delete(id);
     }
@@ -73,23 +66,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional(rollbackOn = Exception.class)
-    public void addUser(HttpServletRequest request, HttpServletResponse response) {
-        String username = request.getParameter(USERNAME);
-        String password = request.getParameter(PASSWORD);
-        String power = request.getParameter(POWER);
-        User user = User.builder().username(username).password(password).power(power).build();
+    @Transactional(rollbackFor = Exception.class)
+    public void addUser(User user) {
         userDao.addUser(user);
     }
 
     @Override
-    @Transactional(rollbackOn = Exception.class)
-    public void updateUser(HttpServletRequest request, HttpServletResponse response) {
-        int id = Integer.parseInt(request.getParameter(ID).trim());
-        String username = request.getParameter(USERNAME).trim();
-        String password = request.getParameter(PASSWORD).trim();
-        String power = request.getParameter(POWER).trim();
-        User user = User.builder().id(id).username(username).password(password).power(power).build();
+    @Transactional(rollbackFor = Exception.class)
+    public void updateUser(User user) {
         userDao.updateUser(user);
     }
 

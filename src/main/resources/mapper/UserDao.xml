@@ -34,10 +34,10 @@
     </select>
 
     <insert id="addUser" parameterType="User">
-        insert into user (username,password,power)values (#{userName},#{password},#{power})
+        insert into user (username,password,power)values (#{username},#{password},#{power})
     </insert>
 
     <update id="updateUser" parameterType="User">
-        UPDATE user SET username=#{userName},password=#{password},power=#{power} WHERE id=#{id}
+        UPDATE user SET username=#{username},password=#{password},power=#{power} WHERE id=#{id}
     </update>
 </mapper>

@@ -15,7 +15,7 @@
         id,article_id,comment,date
     </sql>
     <select id="showArticle" resultType="Article">
-        select a.*,c.name as category from article a,category c WHERE a.categoryId=c.id ORDER BY date DESC limit 10
+        select a.*,c.name as category from article a LEFT JOIN category c ON a.categoryId=c.id ORDER BY date DESC limit 10
     </select>
 
     <insert id="writeBlog" parameterType="Article">
@@ -24,17 +24,17 @@
     </insert>
 
     <select resultType="Article" id="getArticlesByCategoryId" parameterType="int">
-        SELECT a.*,c.name as category FROM article a,category c WHERE a.categoryId=c.id AND categoryId=#{categoryId}
+        SELECT a.*,c.name as category FROM article a LEFT JOIN category c ON a.categoryId=c.id WHERE categoryId=#{categoryId}
         ORDER BY date DESC
     </select>
 
     <select id="getArticlesByDate" parameterType="String" resultType="Article">
-        SELECT a.*,c.name as category FROM article a,category c WHERE a.categoryId=c.id AND a.date like "%"#{date}"%"
+        SELECT a.*,c.name as category FROM article a LEFT JOIN category c ON a.categoryId=c.id WHERE a.date like "%"#{date}"%"
         ORDER BY date DESC
     </select>
 
     <select id="getArticlesByKeyword" parameterType="String" resultType="Article">
-        select a.*,c.name as category from article a ,category c WHERE a.categoryId=c.id AND a.title LIKE
+        select a.*,c.name as category from article a LEFT JOIN category c ON a.categoryId=c.id WHERE a.title LIKE
         "%"#{keyword}"%" ORDER BY date DESC
     </select>
 
@@ -57,11 +57,11 @@
     </select>
 
     <select id="getArticlesByAuthor" resultType="Article" parameterType="String">
-        select a.*,c.name as category from article a ,category c WHERE a.categoryId=c.id AND a.author=#{author}
+        select a.*,c.name as category from article a LEFT JOIN category c ON a.categoryId=c.id WHERE a.author=#{author}
     </select>
 
-    <select id="findAllArticle" resultType="article">
-        SELECT * FROM article
+    <select id="findAllArticle" resultType="Article">
+        SELECT * FROM article ORDER BY date DESC
     </select>
 
     <update id="update" parameterType="Article">

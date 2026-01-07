@@ -1,6 +1,5 @@
 package org.starrier.ishare.service.impl;
 
-import com.google.common.collect.Sets;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.starrier.ishare.dao.ArticleDao;
@@ -10,23 +9,15 @@ import org.starrier.ishare.service.ArticleService;
 import org.starrier.ishare.service.EmailService;
 import org.starrier.ishare.util.SensitiveWordUtil;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import static org.starrier.ishare.constant.EmailConstant.TEN;
 import static org.starrier.ishare.constant.EmailConstant.TWENTY;
-import static org.starrier.ishare.util.Constant.ARTICLE_ID;
-import static org.starrier.ishare.util.Constant.AUTHOR;
-import static org.starrier.ishare.util.Constant.CATEGORY;
-import static org.starrier.ishare.util.Constant.CONTENT;
-import static org.starrier.ishare.util.Constant.DATE;
 import static org.starrier.ishare.util.Constant.DATE_FORMAT;
-import static org.starrier.ishare.util.Constant.ID;
-import static org.starrier.ishare.util.Constant.TITLE;
 
 /**
  * @author Starrier
@@ -48,16 +39,21 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void addArticle(HttpServletRequest request, HttpServletResponse response) {
-        String title = request.getParameter(TITLE);
-        String content = request.getParameter(CONTENT);
-        int categoryId = Integer.parseInt(request.getParameter(CATEGORY));
-        String author = request.getParameter(AUTHOR);
-        Article article = Article.builder().title(title).content(content).date(simpleDateFormat.format(new Date()))
-                .summary(content).categoryId(categoryId).author(author).build();
+    public void addArticle(Article article) {
+        // Set date if not set
+        if (article.getDate() == null || article.getDate().isEmpty()) {
+            article.setDate(simpleDateFormat.format(new Date()));
+        }
+        // Set summary if not set
+        if (article.getSummary() == null || article.getSummary().isEmpty()) {
+            String content = article.getContent();
+            article.setSummary(content != null && content.length() > 200 ? 
+                    content.substring(0, 200) : content);
+        }
         articleDao.writeBlog(article);
 
-        Set<String> sensitiveWordSet = Sets.newHashSetWithExpectedSize(7);
+        // Sensitive word detection and email notification
+        Set<String> sensitiveWordSet = new HashSet<>();
         sensitiveWordSet.add("太多");
         sensitiveWordSet.add("爱恋");
         sensitiveWordSet.add("静静");
@@ -65,15 +61,18 @@ public class ArticleServiceImpl implements ArticleService {
         sensitiveWordSet.add("啦啦");
         sensitiveWordSet.add("感动");
         sensitiveWordSet.add("发呆");
-        //初始化敏感词库
+        // Initialize sensitive word library
         SensitiveWordUtil.init(sensitiveWordSet);
         Set<String> set = SensitiveWordUtil.getSensitiveWord(article.getContent());
-        if (set.size() < TEN) {
-            emailService.sendHealthMessage(author);
-        } else if ((set.size() > TEN) && (set.size() < TWENTY)) {
-            emailService.sendHaveRestMessage(author);
-        } else {
-            emailService.sendSickMessage(author);
+        String author = article.getAuthor();
+        if (author != null) {
+            if (set.size() < TEN) {
+                emailService.sendHealthMessage(author);
+            } else if ((set.size() > TEN) && (set.size() < TWENTY)) {
+                emailService.sendHaveRestMessage(author);
+            } else {
+                emailService.sendSickMessage(author);
+            }
         }
     }
 
@@ -104,10 +103,11 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void addComment(HttpServletRequest request, HttpServletResponse response) {
-        String content = request.getParameter(CONTENT);
-        int articleId = Integer.parseInt(request.getParameter(ARTICLE_ID));
-        Comment comment = Comment.builder().articleId(articleId).comment(content).date(simpleDateFormat.format(new Date())).build();
+    public void addComment(Comment comment) {
+        // Set date if not set
+        if (comment.getDate() == null || comment.getDate().isEmpty()) {
+            comment.setDate(simpleDateFormat.format(new Date()));
+        }
         articleDao.addComment(comment);
     }
 
@@ -127,12 +127,8 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public void update(HttpServletRequest request, HttpServletResponse response) {
-
-        String content = request.getParameter(CONTENT);
-        int id = Integer.parseInt(request.getParameter(ID));
-        String date = request.getParameter(DATE);
-        Article article = Article.builder().content(content).id(id).date(date).build();
+    @Transactional(rollbackFor = Exception.class)
+    public void update(Article article) {
         articleDao.update(article);
     }
 

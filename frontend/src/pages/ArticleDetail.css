@@ -1,0 +1,205 @@
+/* 文章详情页样式 - 保持原SSM项目风格 */
+
+#detail {
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
+  max-width: 1200px;
+  padding-top: 6em;
+  background: rgba(0,0,0,.03) url('/api/assert/images/bg01.png') repeat;
+  min-height: calc(100vh - 200px);
+}
+
+.col-lg-9 {
+  width: 100%;
+}
+
+.panel {
+  margin-bottom: 20px;
+  border-radius: 4px;
+  border: 1px solid rgba(0, 0, 0, .05);
+  box-shadow: 0px 0px 0px 10px rgba(0, 0, 0, 0.03);
+  background: #FFFFFF;
+}
+
+.panel-body {
+  padding: 15px;
+}
+
+.c_titile {
+  font-size: 22px;
+  margin: 20px 0;
+  text-align: center;
+  color: #333;
+  font-weight: bold;
+}
+
+.box_c {
+  border: #ccc 1px dashed;
+  text-align: center;
+  padding: 5px 0;
+  margin-right: 30px;
+  color: #999;
+  margin-bottom: 20px;
+}
+
+.box_c span {
+  margin: 0 10px;
+}
+
+.box_c a {
+  color: #e5474b;
+  text-decoration: none;
+}
+
+.box_c a:hover {
+  text-decoration: underline;
+}
+
+ul.infos {
+  overflow: hidden;
+  margin: 20px 30px 20px 0;
+  line-height: 28px;
+  font-size: 14px;
+  text-indent: 2em;
+  color: #666;
+  list-style: none;
+}
+
+ul.infos p {
+  margin-bottom: 1em;
+}
+
+/* 评论输入框 */
+.pinglun {
+  margin-top: 20px;
+}
+
+.comment-author-info {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.comment-avatar {
+  width: 60px;
+  height: 60px;
+  float: left;
+  border-radius: 50%;
+  border: 3px solid #eee;
+  overflow: hidden;
+  margin-right: 10px;
+}
+
+.comment-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.comment-author-name {
+  height: 60px;
+  line-height: 60px;
+  overflow: hidden;
+  color: #3B3B3B;
+}
+
+.pinglun textarea {
+  padding: 10px 15px;
+  width: 100%;
+  height: 80px;
+  font-size: 13px;
+  border: 1px solid #dcdcdc;
+  border-radius: 4px;
+  background-color: hsla(0, 0%, 71%, .1);
+  resize: none;
+  display: inline-block;
+  vertical-align: top;
+  outline-style: none;
+  font-family: inherit;
+  margin-top: 10px;
+}
+
+.pinglun textarea:focus {
+  border-color: #e5474b;
+  background-color: #fff;
+}
+
+.comment-submit-wrapper {
+  float: right;
+  height: 50px;
+  margin: 10px;
+}
+
+.comment-submit-btn {
+  padding: 10px 25px;
+  background: #e5474b;
+  border: none;
+  border-radius: 5px;
+  color: #fff;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s;
+}
+
+.comment-submit-btn:hover {
+  background: #e85d61;
+}
+
+/* 评论列表 */
+#pingluncontent {
+  margin: 20px;
+}
+
+.comments-header {
+  padding-bottom: 20px;
+  font-size: 17px;
+  font-weight: 700;
+  border-bottom: 1px solid #f0f0f0;
+  margin-bottom: 20px;
+}
+
+.author {
+  margin: 0px 0px 10px 0px;
+  display: flex;
+  align-items: center;
+}
+
+.content1 {
+  margin: 0px 0px 0px 20px;
+}
+
+.comment-text {
+  margin-bottom: 10px;
+  color: #666;
+  line-height: 1.8;
+}
+
+.comment-date {
+  color: #999;
+  font-size: 0.9em;
+  margin-bottom: 15px;
+}
+
+.content1 hr {
+  border: 0;
+  border-bottom: solid 1px #f0f0f0;
+  margin: 15px 0;
+}
+
+.no-comments {
+  text-align: center;
+  padding: 40px;
+  color: #999;
+}
+
+.loading, .error {
+  text-align: center;
+  padding: 4rem 2rem;
+  font-size: 1.2rem;
+}
+
+.error {
+  color: #e5474b;
+}
