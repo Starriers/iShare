@@ -111,5 +111,21 @@ public interface ArticleDao {
      */
     List<Article> findAllArticle();
 
+    /**
+     * Find article list by page.
+     *
+     * @param offset query offset
+     * @param size page size
+     * @return article list
+     */
+    List<Article> findArticlePage(int offset, int size);
+
+    /**
+     * Count all articles.
+     *
+     * @return total count
+     */
+    long countArticles();
+
 
 }

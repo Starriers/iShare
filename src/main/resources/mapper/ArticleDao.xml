@@ -64,6 +64,14 @@
         SELECT * FROM article ORDER BY date DESC
     </select>
 
+    <select id="findArticlePage" resultType="Article">
+        SELECT * FROM article ORDER BY date DESC LIMIT #{offset}, #{size}
+    </select>
+
+    <select id="countArticles" resultType="long">
+        SELECT COUNT(*) FROM article
+    </select>
+
     <update id="update" parameterType="Article">
         update article set content = #{content}, date = #{date} ,summary = #{summary} where id = #{id}
     </update>

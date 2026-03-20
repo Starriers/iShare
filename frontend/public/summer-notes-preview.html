@@ -1,0 +1,409 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>iShare Summer Preview</title>
+  <style>
+    :root {
+      --mint: #7ccfb2;
+      --sky: #9edcff;
+      --lemon: #ffe89a;
+      --bg: #fffdf8;
+      --card: #ffffff;
+      --text: #2f3a3a;
+      --sub: #6f7c7c;
+      --line: #e8efec;
+      --shadow: 0 10px 28px rgba(80, 120, 110, 0.1);
+      --radius: 16px;
+      --max: 1160px;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 85% 8%, rgba(158, 220, 255, 0.2), transparent 28%),
+        radial-gradient(circle at 18% 20%, rgba(124, 207, 178, 0.18), transparent 24%),
+        linear-gradient(180deg, #f7fcff 0%, var(--bg) 48%, #fff 100%);
+      line-height: 1.7;
+    }
+
+    .container {
+      width: min(var(--max), 92vw);
+      margin: 0 auto;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      backdrop-filter: blur(10px);
+      background: rgba(255, 255, 255, 0.78);
+      border-bottom: 1px solid rgba(232, 239, 236, 0.9);
+      z-index: 20;
+    }
+    .nav {
+      height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .logo {
+      font-size: 1.65rem;
+      font-weight: 800;
+      letter-spacing: 0.4px;
+      color: #38aa82;
+    }
+    .menu {
+      display: flex;
+      gap: 22px;
+      color: var(--sub);
+      font-weight: 600;
+    }
+    .menu a {
+      text-decoration: none;
+      color: inherit;
+      padding: 8px 10px;
+      border-radius: 10px;
+    }
+    .menu a:hover { background: rgba(124, 207, 178, 0.14); color: #2a8f6d; }
+
+    .hero {
+      padding: 36px 0 26px;
+      display: grid;
+      grid-template-columns: 1.08fr 0.92fr;
+      gap: 22px;
+    }
+    .hero-card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .hero-main {
+      padding: 30px;
+      position: relative;
+      min-height: 280px;
+      background:
+        linear-gradient(145deg, rgba(124, 207, 178, 0.16), rgba(158, 220, 255, 0.2)),
+        #fff;
+    }
+    .hero-main h1 {
+      margin: 0 0 8px;
+      font-size: clamp(1.9rem, 2.8vw, 2.4rem);
+      line-height: 1.25;
+    }
+    .hero-main p {
+      margin: 0;
+      color: #567;
+      max-width: 34em;
+    }
+    .chips { margin-top: 16px; display: flex; gap: 10px; flex-wrap: wrap; }
+    .chip {
+      border: 1px solid rgba(95, 160, 138, 0.35);
+      background: rgba(124, 207, 178, 0.1);
+      color: #2c7e63;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 6px 12px;
+    }
+
+    .hero-side {
+      padding: 22px;
+      display: grid;
+      gap: 12px;
+      align-content: start;
+    }
+    .small-box {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 14px;
+      background: #fff;
+    }
+    .small-box h4 { margin: 0 0 4px; font-size: 0.95rem; }
+    .small-box p { margin: 0; color: var(--sub); font-size: 0.9rem; }
+
+    .section-title {
+      margin: 4px 0 12px;
+      font-size: 1.28rem;
+      letter-spacing: 0.3px;
+    }
+
+    .categories {
+      margin: 4px 0 14px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+    .cat-btn {
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 14px;
+      padding: 13px 14px;
+      text-align: left;
+      cursor: pointer;
+      transition: 160ms ease;
+      min-height: 96px;
+    }
+    .cat-btn:hover {
+      transform: translateY(-2px);
+      border-color: rgba(96, 176, 152, 0.5);
+      box-shadow: 0 8px 16px rgba(80, 120, 110, 0.09);
+    }
+    .cat-btn.active {
+      background: linear-gradient(140deg, rgba(124, 207, 178, 0.14), rgba(158, 220, 255, 0.18));
+      border-color: rgba(80, 150, 126, 0.45);
+    }
+    .cat-name { font-weight: 700; margin: 0 0 4px; }
+    .cat-desc { font-size: 0.85rem; color: var(--sub); margin: 0; }
+
+    .toolbar {
+      margin-top: 6px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 12px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .tag {
+      font-size: 12.5px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 6px 10px;
+      color: #4d5f5f;
+      background: #fff;
+    }
+    .tag.active {
+      border-color: rgba(124, 207, 178, 0.6);
+      background: rgba(124, 207, 178, 0.12);
+      color: #1c7b5d;
+    }
+
+    .grid {
+      margin: 14px 0 34px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+    .card {
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: 0 6px 16px rgba(80, 120, 110, 0.07);
+    }
+    .thumb {
+      height: 148px;
+      background:
+        linear-gradient(130deg, rgba(124, 207, 178, 0.46), rgba(158, 220, 255, 0.56), rgba(255, 232, 154, 0.44));
+    }
+    .card-body { padding: 14px 14px 12px; }
+    .card-title {
+      margin: 0 0 4px;
+      font-size: 1.02rem;
+      line-height: 1.4;
+      font-weight: 700;
+    }
+    .meta {
+      color: var(--sub);
+      font-size: 12.5px;
+      margin-bottom: 6px;
+    }
+    .excerpt {
+      margin: 0;
+      color: #4f6363;
+      font-size: 0.92rem;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      min-height: 50px;
+    }
+
+    .hint {
+      margin: 10px 0 42px;
+      padding: 14px 16px;
+      border: 1px dashed rgba(124, 207, 178, 0.7);
+      border-radius: 12px;
+      background: rgba(124, 207, 178, 0.06);
+      color: #406160;
+      font-size: 0.92rem;
+    }
+
+    @media (max-width: 980px) {
+      .hero { grid-template-columns: 1fr; }
+      .categories { grid-template-columns: repeat(2, 1fr); }
+      .grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 620px) {
+      .menu { display: none; }
+      .categories { grid-template-columns: 1fr; }
+      .grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="container nav">
+      <div class="logo"><a href="/" style="color:inherit;text-decoration:none;">iShare · 夏日手记</a></div>
+      <nav class="menu">
+        <a href="/">首页</a>
+        <a href="#">栏目</a>
+        <a href="#">时间线</a>
+        <a href="#">关于我</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <article class="hero-card hero-main">
+        <h1>把生活，认真写成文章。</h1>
+        <p>
+          这是一个小清新夏日风格的首页原型。重点是：栏目入口清晰、点进去有明确结构，
+          避免“分类很多但不知道看什么”的问题。
+        </p>
+        <div class="chips">
+          <span class="chip"># 晨间记录</span>
+          <span class="chip"># 周末散步</span>
+          <span class="chip"># 夏日食谱</span>
+          <span class="chip"># 轻复盘</span>
+        </div>
+      </article>
+
+      <aside class="hero-card hero-side">
+        <div class="small-box">
+          <h4>本周状态</h4>
+          <p>更新 6 篇 · 完成 1 次周复盘 · 读书 180 页</p>
+        </div>
+        <div class="small-box">
+          <h4>今日灵感</h4>
+          <p>“把平凡日常写细一点，生活就会更有质感。”</p>
+        </div>
+        <div class="small-box">
+          <h4>精选路线</h4>
+          <p>日常记录 → 周末探索 → 清单复盘</p>
+        </div>
+      </aside>
+    </section>
+
+    <h2 class="section-title">栏目入口（点击查看不同内容流）</h2>
+    <section class="categories" id="categories"></section>
+
+    <section class="toolbar" id="toolbar"></section>
+
+    <section class="grid" id="grid"></section>
+
+    <p class="hint" id="hint"></p>
+  </main>
+
+  <script>
+    const data = {
+      daily: {
+        name: "日常记录",
+        desc: "偏叙事，记录真实一天",
+        tip: "设计建议：按时间线展示，标题+摘要+当天心情标签，降低阅读门槛。",
+        tags: ["全部", "晨间", "通勤", "夜间", "心情"],
+        posts: [
+          ["清晨 7:10 的光线", "2026-03-20 · 6 min", "今天试着慢慢做早餐，发现节奏一慢，焦虑就降下来了。"],
+          ["下班后绕路回家", "2026-03-19 · 5 min", "多走了 2 公里，路边的花摊让我觉得春天提前到了。"],
+          ["雨天里的一点平静", "2026-03-18 · 4 min", "把待办删到只剩三件，反而更容易专注完成。"]
+        ]
+      },
+      weekend: {
+        name: "周末探索",
+        desc: "探店、短途、活动体验",
+        tip: "设计建议：采用卡片网格，强化封面图 + 路线信息，方便快速浏览。",
+        tags: ["全部", "探店", "城市漫步", "一日游", "拍照点"],
+        posts: [
+          ["海边步道半日路线", "2026-03-17 · 8 min", "地铁可达、预算友好，附上 3 个拍照点和咖啡站。"],
+          ["新开的面包店值不值", "2026-03-15 · 7 min", "从口感、排队、价格三个维度做了小评测。"],
+          ["公园野餐清单（轻量版）", "2026-03-12 · 5 min", "两人份、总价 80 内，适合临时起意的周末下午。"]
+        ]
+      },
+      review: {
+        name: "清单与复盘",
+        desc: "习惯、消费、阅读复盘",
+        tip: "设计建议：列表里增加“本周完成度”可视化，减少纯文字疲劳。",
+        tags: ["全部", "习惯", "消费", "读书", "运动"],
+        posts: [
+          ["三月第二周复盘", "2026-03-16 · 9 min", "完成了 70% 计划，拖延主要出现在晚间。下周改早起块。"],
+          ["本月阅读进度报告", "2026-03-14 · 6 min", "非虚构阅读明显增加，做了 12 条摘录和 3 条反思。"],
+          ["运动打卡 14 天后", "2026-03-11 · 5 min", "体感上更轻了，睡眠质量也更稳定。"]
+        ]
+      },
+      idea: {
+        name: "灵感手记",
+        desc: "照片 + 短文 + 碎片化想法",
+        tip: "设计建议：保留更大留白和更短文本，突出“轻阅读”和情绪氛围。",
+        tags: ["全部", "一句话", "配图", "摘录", "灵感"],
+        posts: [
+          ["今天的云像棉花糖", "2026-03-20 · 2 min", "有时候，一张照片就够写完一天。"],
+          ["把句子写短一点", "2026-03-18 · 3 min", "短句更容易留下呼吸感，也更接近当下感受。"],
+          ["傍晚 6 点的颜色", "2026-03-17 · 2 min", "天光从蓝到橙的那十分钟，是我最喜欢的时段。"]
+        ]
+      }
+    };
+
+    const categories = document.getElementById("categories");
+    const toolbar = document.getElementById("toolbar");
+    const grid = document.getElementById("grid");
+    const hint = document.getElementById("hint");
+
+    let current = "daily";
+
+    function renderCategories() {
+      categories.innerHTML = "";
+      Object.entries(data).forEach(([key, v]) => {
+        const btn = document.createElement("button");
+        btn.className = "cat-btn" + (key === current ? " active" : "");
+        btn.innerHTML = `<p class="cat-name">${v.name}</p><p class="cat-desc">${v.desc}</p>`;
+        btn.onclick = () => {
+          current = key;
+          render();
+        };
+        categories.appendChild(btn);
+      });
+    }
+
+    function renderToolbar() {
+      const tags = data[current].tags;
+      toolbar.innerHTML = `<strong style="font-size:14px;color:#445;">筛选：</strong>` +
+        tags.map((t, i) => `<span class="tag ${i === 0 ? "active" : ""}">${t}</span>`).join("");
+    }
+
+    function renderPosts() {
+      grid.innerHTML = "";
+      data[current].posts.forEach(([title, meta, excerpt]) => {
+        const card = document.createElement("article");
+        card.className = "card";
+        card.innerHTML = `
+          <div class="thumb"></div>
+          <div class="card-body">
+            <h3 class="card-title">${title}</h3>
+            <div class="meta">${meta}</div>
+            <p class="excerpt">${excerpt}</p>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+      hint.textContent = "当前栏目：" + data[current].name + "｜" + data[current].tip;
+    }
+
+    function render() {
+      renderCategories();
+      renderToolbar();
+      renderPosts();
+    }
+
+    render();
+  </script>
+</body>
+</html>

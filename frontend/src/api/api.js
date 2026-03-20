@@ -54,6 +54,7 @@ export const userAPI = {
 // Article API
 export const articleAPI = {
   getAllArticles: () => api.get('/articles'),
+  getArticlePage: (page = 1, size = 10) => api.get('/articles', { params: { page, size } }),
   getArticleById: (id) => api.get(`/articles/${id}`),
   createArticle: (data) => api.post('/articles', data),
   updateArticle: (id, data) => api.put(`/articles/${id}`, data),

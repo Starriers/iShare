@@ -4,19 +4,27 @@ import { articleAPI } from '../api/api';
 import './Home.css';
 
 function Home() {
+  const pageSize = 6;
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [total, setTotal] = useState(0);
 
   useEffect(() => {
-    loadArticles();
-  }, []);
+    loadArticles(page);
+  }, [page]);
 
-  const loadArticles = async () => {
+  const loadArticles = async (targetPage) => {
     try {
-      const response = await articleAPI.getAllArticles();
+      setLoading(true);
+      const response = await articleAPI.getArticlePage(targetPage, pageSize);
       if (response && response.code === 200) {
-        setArticles(response.data || []);
+        const pageData = response.data || {};
+        setArticles(pageData.items || []);
+        setTotalPages(pageData.totalPages || 1);
+        setTotal(pageData.total || 0);
       } else {
         setError('加载文章失败: ' + (response?.message || '未知错误'));
       }
@@ -31,6 +39,14 @@ function Home() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const toPrevPage = () => {
+    setPage((prev) => Math.max(prev - 1, 1));
+  };
+
+  const toNextPage = () => {
+    setPage((prev) => Math.min(prev + 1, totalPages));
   };
 
   if (loading) {
@@ -85,9 +101,9 @@ function Home() {
                       </Link>
                     </li>
                     <li>
-                      <Link to="/articles/category/2">
-                        <span className="icon">🏠</span> &nbsp; 生活实用
-                      </Link>
+                      <a href="/summer-notes-preview.html">
+                        <span className="icon">🍃</span> &nbsp; 夏日手记
+                      </a>
                     </li>
                     <li>
                       <Link to="/articles/category/3">
@@ -95,12 +111,12 @@ function Home() {
                       </Link>
                     </li>
                     <li>
-                      <Link to="/articles/category/4">
+                      <Link to="/articles/category/7">
                         <span className="icon">✈️</span> &nbsp; 旅行
                       </Link>
                     </li>
                     <li>
-                      <Link to="/articles/category/5">
+                      <Link to="/articles/category/8">
                         <span className="icon">📚</span> &nbsp; 阅读
                       </Link>
                     </li>
@@ -119,46 +135,60 @@ function Home() {
               {articles.length === 0 ? (
                 <div className="no-articles">暂无文章，快来发布第一篇吧！</div>
               ) : (
-                articles.map((article) => (
-                  <div key={article.id} className="post">
-                    <div>
-                      <div className="author-avatar">
-                        <img src="/api/assert/images/life.png" alt={article.author} width="80" height="80"/>
+                <>
+                  {articles.map((article) => (
+                    <div key={article.id} className="post">
+                      <div>
+                        <div className="author-avatar">
+                          <img src="/api/assert/images/life.png" alt={article.author} width="80" height="80"/>
+                        </div>
+                        <div className="author-name">
+                          <Link to={`/user/${article.author}`}>&nbsp;&nbsp;{article.author}</Link>
+                        </div>
                       </div>
-                      <div className="author-name">
-                        <Link to={`/user/${article.author}`}>&nbsp;&nbsp;{article.author}</Link>
+                      <div style={{ marginTop: '3px' }}>
+                        <h3>
+                          <Link to={`/article/${article.id}`}>{article.title}</Link>
+                        </h3>
                       </div>
-                    </div>
-                    <div style={{ marginTop: '3px' }}>
-                      <h3>
-                        <Link to={`/article/${article.id}`}>{article.title}</Link>
-                      </h3>
-                    </div>
-                    <div className="entry">
-                      <p>{article.summary}</p>
-                      <p>
-                        <Link className="btn btn-primary btn-lg" to={`/article/${article.id}`} role="button">
-                          阅读全文
-                        </Link>
-                      </p>
-                    </div>
-                    <div className="article-actions">
-                      <span className="date">{article.date}</span>
-                      <div className="action-buttons">
-                        <a href="#">
-                          <span className="icon">👍</span> &nbsp;120
-                        </a>
-                        <a href="#">
-                          <span className="icon">💬</span> &nbsp;110
-                        </a>
-                        <a href="#">
-                          <span className="icon">⭐</span> &nbsp;100
-                        </a>
+                      <div className="entry">
+                        <p>{article.summary}</p>
+                        <p>
+                          <Link className="btn btn-primary btn-lg" to={`/article/${article.id}`} role="button">
+                            阅读全文
+                          </Link>
+                        </p>
                       </div>
+                      <div className="article-actions">
+                        <span className="date">{article.date}</span>
+                        <div className="action-buttons">
+                          <a href="#">
+                            <span className="icon">👍</span> &nbsp;120
+                          </a>
+                          <a href="#">
+                            <span className="icon">💬</span> &nbsp;110
+                          </a>
+                          <a href="#">
+                            <span className="icon">⭐</span> &nbsp;100
+                          </a>
+                        </div>
+                      </div>
+                      <hr />
                     </div>
-                    <hr />
+                  ))}
+
+                  <div className="pagination">
+                    <button className="pagination-btn" onClick={toPrevPage} disabled={page <= 1}>
+                      上一页
+                    </button>
+                    <span className="pagination-info">
+                      第 {page} / {totalPages} 页（共 {total} 条）
+                    </span>
+                    <button className="pagination-btn" onClick={toNextPage} disabled={page >= totalPages}>
+                      下一页
+                    </button>
                   </div>
-                ))
+                </>
               )}
               <div style={{ clear: 'both' }}>&nbsp;</div>
             </div>

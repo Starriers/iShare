@@ -82,6 +82,19 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
+    public List<Article> findArticlePage(int page, int size) {
+        int safePage = Math.max(page, 1);
+        int safeSize = Math.max(size, 1);
+        int offset = (safePage - 1) * safeSize;
+        return articleDao.findArticlePage(offset, safeSize);
+    }
+
+    @Override
+    public long countArticles() {
+        return articleDao.countArticles();
+    }
+
+    @Override
     public List<Article> getArticlesByCategoryId(int id) {
         return articleDao.getArticlesByCategoryId(id);
     }

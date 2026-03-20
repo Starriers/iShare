@@ -4,13 +4,20 @@
   box-sizing: border-box;
 }
 
+:root {
+  --primary: #58c6a7;
+  --primary-hover: #45b696;
+  --primary-soft: rgba(88, 198, 167, 0.16);
+  --text-main: #111111;
+}
+
 body {
   font-family: "Lato", sans-serif;
   font-size: 15pt;
   font-weight: 300;
   line-height: 2;
   background: rgba(0,0,0,.03) url('/api/assert/images/bg01.png') repeat;
-  color: #111111;
+  color: var(--text-main);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }

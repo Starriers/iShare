@@ -8,7 +8,7 @@ function Footer() {
         <a href="#">加入我们</a>&nbsp;&nbsp;&nbsp; &nbsp;
         <a href="#">联系我们</a>
       </div>
-      <p>Copyright @ 2024 <a href="#">i Share </a> 当前呈现版本</p>
+      <p>Copyright © 2017 - 2026 <a href="#">i Share </a> 当前呈现版本</p>
     </div>
   );
 }

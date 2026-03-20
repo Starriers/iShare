@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import org.starrier.ishare.model.dto.ApiResponse;
 import org.starrier.ishare.model.dto.ArticleRequest;
 import org.starrier.ishare.model.dto.CommentRequest;
+import org.starrier.ishare.model.dto.PageResult;
 import org.starrier.ishare.model.entity.Article;
 import org.starrier.ishare.model.entity.Comment;
 import org.starrier.ishare.service.ArticleService;
@@ -31,6 +32,23 @@ public class ArticleRestController {
     public ApiResponse<List<Article>> getAllArticles() {
         List<Article> articles = articleService.findAllArticle();
         return ApiResponse.success(articles);
+    }
+
+    /**
+     * Get article page.
+     */
+    @GetMapping(params = {"page", "size"})
+    public ApiResponse<PageResult<Article>> getArticlePage(
+            @RequestParam int page,
+            @RequestParam int size) {
+        int safePage = Math.max(page, 1);
+        int safeSize = Math.max(size, 1);
+        long total = articleService.countArticles();
+        List<Article> items = articleService.findArticlePage(safePage, safeSize);
+        int totalPages = total == 0 ? 1 : (int) Math.ceil((double) total / safeSize);
+
+        PageResult<Article> data = new PageResult<>(items, total, safePage, safeSize, totalPages);
+        return ApiResponse.success(data);
     }
 
     /**

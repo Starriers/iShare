@@ -25,6 +25,22 @@ public interface ArticleService {
     List<Article> findAllArticle();
 
     /**
+     * Find article page.
+     *
+     * @param page page number (starts from 1)
+     * @param size page size
+     * @return article page list
+     */
+    List<Article> findArticlePage(int page, int size);
+
+    /**
+     * Count all articles.
+     *
+     * @return total count
+     */
+    long countArticles();
+
+    /**
      * Get articles by category id.
      *
      * @param id id

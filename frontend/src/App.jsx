@@ -3,6 +3,8 @@ import { useState, useEffect } from 'react';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Home from './pages/Home';
+import CategoryArticles from './pages/CategoryArticles';
+import Focus from './pages/Focus';
 import ArticleDetail from './pages/ArticleDetail';
 import ArticleWrite from './pages/ArticleWrite';
 import UserProfile from './pages/UserProfile';
@@ -49,6 +51,8 @@ function App() {
           } />
           <Route path="/login" element={user ? <Navigate to="/" /> : <Login onLogin={handleLogin} />} />
           <Route path="/register" element={user ? <Navigate to="/" /> : <Register />} />
+          <Route path="/focus" element={<Focus />} />
+          <Route path="/articles/category/:categoryId" element={<CategoryArticles />} />
           <Route path="/article/:id" element={<ArticleDetail user={user} />} />
           <Route path="/write" element={user ? <ArticleWrite user={user} /> : <Navigate to="/login" />} />
           <Route path="/user/:username" element={<UserProfile />} />
